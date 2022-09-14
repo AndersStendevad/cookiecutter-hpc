@@ -1,6 +1,8 @@
-# cookiecutter-template
+# cookiecutter-hpc
+The one and only cookiecutter for working on a hpc cluster. Includes everything you need to start training you ML projects.
 
-A work in progress cookiecutter to be able to start a cookiecutter.
+## Documentation
+You can find documenation here: [github.com/pages/AndersStendevad/cookiecutter-hpc/](github.com/pages/AndersStendevad/cookiecutter-hpc/)
 
 ## Install for development
 <code>pip install tox</code>
@@ -11,5 +13,4 @@ A work in progress cookiecutter to be able to start a cookiecutter.
 <code>tox</code>
 
 ## Use the cookiecutter
-
-<code>cookiecutter <PATH_TO_REPO / GIT_CLONE_LINK></code>
+<code>cookiecutter git@github.com:AndersStendevad/cookiecutter-hpc.git</code>

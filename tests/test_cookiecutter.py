@@ -31,4 +31,3 @@ def test_docs(bake, helper):
 def test_lint(bake, helper):
     """check lint in baked project"""
     helper.check_result(run("tox -e lint", shell=True, capture_output=True))
-

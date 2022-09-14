@@ -1,14 +1,16 @@
+"""
+Datastreamer
+"""
+
 import os
 from glob import glob
-from pathlib import Path
 from abc import ABC, abstractmethod
 
 import math
 
 
-import {{cookiecutter.package_name}}.preprocess as preprocess
+from {{cookiecutter.package_name}}.preprocess import Loader
 import sys
-import csv
 
 
 class DataStreamer(ABC):
@@ -33,58 +35,38 @@ class DataStreamer(ABC):
 
         self.ensure_folders()
 
-    @abstractmethod
-    def raw_preprocess(self, transforms=[]):
+    def ensure_folders(self) -> None:
         """
-        Streams raw data.
+        Ensures the necessary folders exist. Data should already be downloaded
+        """
 
-        Parameters
+        if not os.path.exists(os.path.join(self.data_path, self.target_folder)):
+            os.mkdir(os.path.join(self.data_path, self.target_folder))
+
+    @property
+    @abstractmethod
+    def target_folder(self) -> str:
+        """
+        Returns
         ----------
-        transforms : list, optional
-            List of transforms to be applied to the data. The default is no transforms.
+        target_folder: str
+            Name of target folder
         """
+        ...
 
-        loader = preprocess.Loader(
-            os.path.join(self.data_path, "rawdata"), shuffle=self.shuffle
-        )
-        transformer = Transformer(transforms)
-        n = 0
-        filenames = loader.filenames
-        sys.stdout.write("Pre-Streaming. {}/{} Done  \r".format(n, len(filenames)))
-        sys.stdout.flush()
-        for content, name in zip(loader, filenames):
-
-            if content is None:
-                n += 1
-                sys.stdout.write(
-                    "Pre-Streaming. {}/{} Done  \r".format(n, len(filenames))
-                )
-                sys.stdout.flush()
-                continue
-
-            contents = transformer.transform(content)
-
-            if contents is None:
-                n += 1
-                sys.stdout.write(
-                    "Pre-Streaming. {}/{} Done  \r".format(n, len(filenames))
-                )
-                sys.stdout.flush()
-                continue
-
-            for i, x in enumerate(contents):
-                content_path = os.path.join(
-                    self.data_path, "predata", f"{i}_{Path(name).name}"
-                )
-                x.save(content_path)
-
-            n += 1
-            sys.stdout.write("Pre-Streaming. {}/{} Done  \r".format(n, len(filenames)))
-            sys.stdout.flush()
-        print("")
+    @property
+    @abstractmethod
+    def Loader(self) -> Loader:
+        """
+        Returns
+        ----------
+        Loader : Loader
+            Loader object to use
+        """
+        ...
 
     @abstractmethod
-    def preprocess(self, transforms=[]):
+    def preprocess(self, transforms=[]) -> None:
         """
         Streams data.
 
@@ -93,104 +75,80 @@ class DataStreamer(ABC):
         transforms : list, optional
             List of transforms to be applied to the data. The default is no transforms.
         """
-        loader = preprocess.Loader(
-            os.path.join(self.data_path, "predata"), shuffle=self.shuffle
+        loader = self.Loader(
+            os.path.join(self.data_path, self.target_folder), shuffle=self.shuffle
         )
-        transformer = Transformer(transforms)
+
         n = 0
         filenames = loader.filenames
 
         sys.stdout.write("Streaming. {}/{} Done  \r".format(n, len(filenames)))
         sys.stdout.flush()
 
-        for content, name in zip(loader, filenames):
+        for content, filename in zip(loader, filenames):
 
-            if content is None:
-                n += 1
-                sys.stdout.write("Streaming. {}/{} Done  \r".format(n, len(filenames)))
-                sys.stdout.flush()
-                continue
-
-            try:
-                content = transformer.transform(content)
-            except ValueError:
-                n += 1
-                sys.stdout.write("Streaming. {}/{} Done  \r".format(n, len(filenames)))
-                sys.stdout.flush()
-                continue
-
-            with open(
-                os.path.join(
-                    self.data_path, "cleandata", f"{Path(name).name[:-4]}.csv"
-                ),
-                "w",
-            ) as f:
-                if type(song[0]) == str:
-                    f.write(",".join(content))
-                else:
-                    writer = csv.writer(f)
-                    writer.writerows(content)
+            content = self.transform(content, filename, transforms)
 
             n += 1
             sys.stdout.write("Streaming. {}/{} Done  \r".format(n, len(filenames)))
             sys.stdout.flush()
+
         print("")
 
-    def ensure_folders(self):
+    @abstractmethod
+    def transform(self, content, filename, transforms) -> None:
         """
-        Ensures the necessary folders exist. Data should already be downlaoded
-        """
-
-        if not os.path.exists(os.path.join(self.data_path, "predata")):
-            os.mkdir(os.path.join(self.data_path, "predata"))
-
-        if not os.path.exists(os.path.join(self.data_path, "cleandata")):
-            os.mkdir(os.path.join(self.data_path, "cleandata"))
-
-
-class Transformer:
-    """
-    transform class is used to transform data.
-    """
-
-    def __init__(self, transforms=[]):
-        """
-        Initialize the transform class.
-        """
-
-        self.transforms = transforms
-
-    def transform(self, content):
-        """
-        Returns a song with transformations applied
+        Transforms data and saves to disk
 
         Parameters
         ----------
-        content : list
+        content
             content to be transformed.
-
-        Returns
-        -------
-        content : list   
-            Transformed content.
+        filename: str
+            Name of file without extension
+        transforms : list
+            List of transforms to be applied
         """
-
-        for trnsfrm in self.transforms:
-            content = trnsfrm(content)
-        return cont
+        ...
 
 
-def savecontentlist(contentlist, filename):
+def savecontentlist(contentlist, filename) -> None:
+    """
+    Saves a list of content to a csv file
+
+    Parameters
+    ----------
+    contentlist : list
+        List of content to be saved.
+    filename : str
+        Name of file to save to.
+    """
     with open(filename, "w+") as f:
         for item in contentlist:
             f.write("{}.csv\n".format(item[:-4]))
 
 
-def split(data_path, train=0.8, val=0.1, test=0.1):
+def split(data_path, train=0.8, val=0.1, test=0.1) -> None:
+    """
+    Parameters
+    ----------
+    data_path : str
+        Path to the data folder.
+    train : float, optional
+        Percentage of data to be used for training. The default is 0.8.
+    val : float, optional
+        Percentage of data to be used for validation. The default is 0.1.
+    test : float, optional
+        Percentage of data to be used for testing. The default is 0.1.
+
+    Returns
+    -------
+    None.
+    """
 
     filenames = [
         y
-        for x in os.walk(os.path.join(data_path, "cleandata"))
+        for x in os.walk(os.path.join(data_path, "clean_data"))
         for y in glob(os.path.join(x[0], "*.csv"))
     ]
     if train + val + test != 1:

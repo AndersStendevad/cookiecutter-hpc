@@ -1,3 +1,7 @@
+"""
+Transformer
+"""
+
 from transformers import NystromformerForMaskedLM, NystromformerConfig
 
 from {{cookiecutter.package_name}}.model.settings import ModelSettings

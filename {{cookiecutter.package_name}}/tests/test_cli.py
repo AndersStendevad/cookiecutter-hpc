@@ -1,6 +1,6 @@
 import os
 import shutil
-import pytest 
+import pytest
 
 from {{cookiecutter.package_name}} import __version__ as VERSION
 from {{cookiecutter.package_name}}.cli import cli
@@ -11,6 +11,7 @@ def test_{{cookiecutter.package_name}}(runner):
         result = runner.invoke(cli, ["--version"])
         assert not result.exception
         assert result.output.split("\n")[-2] == f"{VERSION}"
+
 
 @pytest.mark.skip(reason="Enable when you are ready")
 def test_{{cookiecutter.package_name}}_preprocess(runner, data_path):
@@ -43,4 +44,3 @@ def test_{{cookiecutter.package_name}}_train(runner, data_path):
         if not os.path.exists("models/model.pt"):
             raise Exception(f"models/model.pt does not exist. {result.exception}")
         assert not result.exception
-

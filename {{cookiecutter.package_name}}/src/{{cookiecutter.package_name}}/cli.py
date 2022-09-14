@@ -111,19 +111,15 @@ def cli(
         datastreamer = DataStreamer(data)
 
         if preprocess_pack == "standard":
-            transforms = []
+            transforms = []  # Insert list of transforms to apply
         else:
             transforms = []
 
         print(
-            f"""Streaming data. From {os.path.join(data, "rawdata")} to {os.path.join(data, "predata")}"""  # noqa
+            f"""Streaming data. From {os.path.join(data, "rawdata")} to {os.path.join(data, "cleandata")}"""  # noqa
         )
         datastreamer.preprocess(transforms)
 
-        print(
-            f"""Streaming data. From {os.path.join(data, "predata")} to {os.path.join(data, "cleandata")}"""  # noqa
-        )
-        datastreamer.preprocess([])
         split(data_path=data)
 
     if train:

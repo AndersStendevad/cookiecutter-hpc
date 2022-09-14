@@ -66,4 +66,4 @@ html_theme = "sphinx_rtd_theme"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = []
 autosummary_generate = True
-nitpick_ignore = [("py:class", "type")]
+nitpick_ignore = [("py:class", "type"), ("py:class", "typing.Any")]

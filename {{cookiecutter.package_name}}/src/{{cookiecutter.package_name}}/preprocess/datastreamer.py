@@ -26,7 +26,7 @@ class DataStreamer(ABC):
         ----------
         data_path : str
             Path to the data folder.
-        shuffle : bool, optional
+        shuffle : bool
             Whether to shuffle the data. The default is False.
         """
 
@@ -72,7 +72,7 @@ class DataStreamer(ABC):
 
         Parameters
         ----------
-        transforms : list, optional
+        transforms : list
             List of transforms to be applied to the data. The default is no transforms.
         """
         loader = self.Loader(
@@ -134,16 +134,16 @@ def split(data_path, train=0.8, val=0.1, test=0.1) -> None:
     ----------
     data_path : str
         Path to the data folder.
-    train : float, optional
+    train : float
         Percentage of data to be used for training. The default is 0.8.
-    val : float, optional
+    val : float
         Percentage of data to be used for validation. The default is 0.1.
-    test : float, optional
+    test : float
         Percentage of data to be used for testing. The default is 0.1.
 
     Returns
     -------
-    None.
+    None
     """
 
     filenames = [

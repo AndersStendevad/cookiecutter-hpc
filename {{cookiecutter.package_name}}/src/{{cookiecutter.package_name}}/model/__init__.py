@@ -6,17 +6,14 @@ This submodule contains functions and classes from the following files:
 
 * train.py
 * transformer.py
-* setting.py
 
 """
 
 from {{cookiecutter.package_name}}.model.train import train
-from {{cookiecutter.package_name}}.model.transformer import NystromTransformer
-from {{cookiecutter.package_name}}.model.settings import ModelSettings
+from {{cookiecutter.package_name}}.model.transformer import Transformer
 
 
 __all__ = [
     "train",
-    "ModelSettings",
-    "NystromTransformer",
+    "Transformer",
 ]

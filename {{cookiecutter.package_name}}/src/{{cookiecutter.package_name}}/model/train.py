@@ -29,11 +29,11 @@ def train(
         Path to the dataset folder.
     model_path: str
         Path to the model.
-    hours: int = 60
+    hours: int
         Number of hours to train for.
-    minutes: int = 0
+    minutes: int
         Number of minutes to train for.
-    logfile: str = "log.txt"
+    logfile: str
         Path to the log file.
     """
 

@@ -1,0 +1,4 @@
+Licence
+=======
+
+.. literalinclude:: ../LICENCE.txt

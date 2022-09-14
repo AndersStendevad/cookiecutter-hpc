@@ -2,7 +2,7 @@
 The one and only cookiecutter for working on a hpc cluster. Includes everything you need to start training you ML projects.
 
 ## Documentation
-You can find documenation here: [github.com/pages/AndersStendevad/cookiecutter-hpc/](github.com/pages/AndersStendevad/cookiecutter-hpc/)
+You can find documentation here: [github.com/pages/AndersStendevad/cookiecutter-hpc/](https://www.github.com/pages/AndersStendevad/cookiecutter-hpc/)
 
 ## Install for development
 <code>pip install tox</code>

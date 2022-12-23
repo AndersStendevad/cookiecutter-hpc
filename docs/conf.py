@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = "cookiecutter-template"
-copyright = "2022, Anders Stendevad"
+copyright = "2023, Anders Stendevad"
 author = "Anders Stendevad"
 
 # The full version, including alpha/beta/rc tags

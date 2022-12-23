@@ -16,14 +16,17 @@
 
 
 # -- Project information -----------------------------------------------------
+from {{cookiecutter.package_name}} import __version__
+
 
 project = "{{cookiecutter.package_name}}"
-copyright = "2022, {{cookiecutter.author}}"
+copyright = "2023, {{cookiecutter.author}}"
 author = "{{cookiecutter.author}}"
 
-# The full version, including alpha/beta/rc tags
-release = "0.0.1"
-
+# The short X.Y version.
+version = __version__
+# The full version, including alpha/beta/rc tags.
+release = version
 
 # -- General configuration ---------------------------------------------------
 

@@ -12,7 +12,3 @@ def runner():
 def data_path() -> str:
     return os.path.dirname(os.path.realpath(__file__)) + "/data"
 
-
-@pytest.fixture
-def model_path() -> str:
-    return os.path.dirname(os.path.realpath(__file__)) + "/models/model.ml"
